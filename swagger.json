@@ -1,0 +1,167 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Http Illusion",
+    "description": "Http Illusion is a small service built to mock http communication with third party",
+    "version": "v0.1"
+  },
+  "host": "localhost",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/setup": {
+      "post": {
+        "description": "Upsert mock",
+        "parameters": [
+          {
+            "name": "req",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Reaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "string",
+              "example": "Added new reaction"
+            },
+            "description": "Mock added"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete mock",
+        "parameters": [
+          {
+            "name": "req",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "request": {
+                  "$ref": "#/definitions/Request"
+                }
+              },
+              "required": ["request"],
+              "example": {
+                "request": {
+                  "path": "/oauth/token",
+                  "method": "POST",
+                  "query": {
+                    "username": "1d76dc2cdf4b49d9bfd864c5d14a39f4"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "string",
+              "example": "AddedReaction removed"
+            },
+            "description": "Mock deleted"
+          }
+        }
+      },
+      "get": {
+        "description": "Get current state",
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Reaction"
+              }
+            },
+            "description": "Lists all currently set reactions"
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "Request": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "HTTP method"
+        },
+        "path": {
+          "type": "string",
+          "description": "Request path starting from /"
+        },
+        "query": {
+          "type": "object",
+          "description": "String -> string map"
+        },
+        "headers": {
+          "type": "object",
+          "description": "String -> String map"
+        },
+        "body": {
+          "type": "object",
+          "description": "Json object"
+        }
+      }
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "description": "HTTP status"
+        },
+        "body": {
+          "type": "object",
+          "description": "Json object"
+        }
+      },
+      "required": ["status", "body"]
+    },
+    "Reaction": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "$ref": "#/definitions/Request"
+        },
+        "response": {
+          "$ref": "#/definitions/Response"
+        }
+      },
+      "required": ["request", "response"],
+      "example": {
+        "request": {
+          "path": "/oauth/token",
+          "method": "POST",
+          "query": {
+            "username": "1d76dc2cdf4b49d9bfd864c5d14a39f4"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "scope": "noone cares",
+            "access_token": "thesupertoken",
+            "expires_in": 100,
+            "token_type": "Bearer"
+          }
+        }
+      }
+    }
+  }
+}
