@@ -4,7 +4,7 @@ Http Illusion
 ## What is it ##
 
 The service is built to serve as a proxy decorator for HTTP interaction between services.
-The idea is to define criteria and an HTTP responses to mock third party service.
+The idea is to define criteria and HTTP responses dynamically to mock third party service.
 
 ## What can it do ##
 
