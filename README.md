@@ -94,3 +94,20 @@ Example of response
     }
 ]
 ```
+
+## Env vars ##
+
+The application is using the following  env vars to setup config:
+- FALLBACK_SERVICE_HOST host of the service to proxy request if no handler was able to process the request
+- FALLBACK_SERVICE_PORT port of the service to proxy request if no handler was able to process the request
+- FALLBACK_SERVICE_SCHEME scheme of the request to proxy request if no handler was able to process the request
+
+When using couchbase as a storage
+- COUCHBASE_URL_1
+- COUCHBASE_URL_2 optional
+- COUCHBASE_URL_3 optional
+- COUCHBASE_URL_4 optional
+- COUCHBASE_BUCKET_NAME name of a bucket to store configuration to
+- COUCHBASE_BUCKET_PASSWORD password of a bucket to store configuration to
+
+Default port the application listens to is 9090. Can be adjusted in configuration file.
