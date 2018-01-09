@@ -4,7 +4,7 @@ Http Illusion
 ## What is it ##
 
 The service is built to serve as a proxy decorator for HTTP interaction between services.
-The idea is to define criteria and an HTTP responses to mock third party service.
+The idea is to define criteria and HTTP responses dynamically to mock third party service.
 
 ## What can it do ##
 
@@ -94,3 +94,20 @@ Example of response
     }
 ]
 ```
+
+## Env vars ##
+
+The application is using the following  env vars to setup config:
+- FALLBACK_SERVICE_HOST host of the service to proxy request if no handler was able to process the request
+- FALLBACK_SERVICE_PORT port of the service to proxy request if no handler was able to process the request
+- FALLBACK_SERVICE_SCHEME scheme of the request to proxy request if no handler was able to process the request
+- APPLICATION_HOST host to bind to
+- APPLICATION_PORT port to bind to
+
+When using couchbase as a storage
+- COUCHBASE_URL_1
+- COUCHBASE_URL_2 optional
+- COUCHBASE_URL_3 optional
+- COUCHBASE_URL_4 optional
+- COUCHBASE_BUCKET_NAME name of a bucket to store configuration to
+- COUCHBASE_BUCKET_PASSWORD password of a bucket to store configuration to
