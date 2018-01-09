@@ -109,5 +109,5 @@ When using couchbase as a storage
 - COUCHBASE_URL_4 optional
 - COUCHBASE_BUCKET_NAME name of a bucket to store configuration to
 - COUCHBASE_BUCKET_PASSWORD password of a bucket to store configuration to
-
-Default port the application listens to is 9090. Can be adjusted in configuration file.
+- APPLICATION_HOST host to bind to
+- APPLICATION_PORT port to bind to
