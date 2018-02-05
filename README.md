@@ -11,11 +11,33 @@ The idea is to define criteria and HTTP responses dynamically to mock third part
 The service exposes an api to setup criteria and HTTP response.
 Whenever it receives a http request the service checks if there is a matching criteria, if so returns the matching http response, otherwise just proxies request/response.
 
+## Setup ##
+
+See [Swagger documentation](http://htmlpreview.github.io/?https://github.com/gipeshka/http-illusion/blob/master/docs/index.html)
+
+Criteria is defined by `request` object in a request.
+
+Criteria has the following fields that can be used to describe http request:
+
+- `path` string
+- `method` string
+- `headers` object, string to string map
+- `query` object, string to string map. Matches get parameters of a request
+- `bodyJson` object. Matches body of a request
+- `bodyUrlEncoded` object, string to string map. Matches body of a request
+
+All the matches check that given value is a subset of the value in a request.
+
+Response has the following fields hat can be used to describe http response:
+
+- `status` int
+- `body` Json value
+
 ## Examples ##
 
 To setup mock
 
-```
+```bash
 curl -X POST \
   http://localhost:9090/setup \
   -d '{
@@ -39,7 +61,8 @@ curl -X POST \
 ```
 
 To delete mock
-```
+
+```bash
 curl -X DELETE \
   http://localhost:9090/setup \
   -d '{
@@ -54,12 +77,14 @@ curl -X DELETE \
 ```
 
 To list mocks
-```
+
+```bash
 curl -X GET http://localhost:9090/setup
 ```
 
 Example of response
-```
+
+```json
 [
     {
         "request": {

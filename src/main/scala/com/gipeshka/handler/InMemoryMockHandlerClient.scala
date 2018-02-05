@@ -66,7 +66,8 @@ class InMemoryMockHandlerClient @Inject()(implicit
     val methodCondition = request.method.map(method => new MethodCondition(method))
     val queryCondition = request.query.map(query => new QueryCondition(query))
     val headerCondition = request.headers.map(headers => new HeaderCondition(headers))
-    val bodyJsonCondition = request.body.map(body => new BodyJsonCondition(body))
+    val bodyJsonCondition = request.bodyJson.map(json => new BodyJsonCondition(json))
+    val bodyUrlEncoded = request.bodyUrlEncoded.map(urlEncoded => new BodyUrlEncodedCondition(urlEncoded))
 
     new ChainCondition()
       .and(pathCondition)
@@ -74,6 +75,7 @@ class InMemoryMockHandlerClient @Inject()(implicit
       .and(queryCondition)
       .and(headerCondition)
       .and(bodyJsonCondition)
+      .and(bodyUrlEncoded)
   }
 
   private def buildResponse(response: ReactionResponsePart): HttpResponse = {

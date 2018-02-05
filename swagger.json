@@ -3,7 +3,11 @@
   "info": {
     "title": "Http Illusion",
     "description": "Http Illusion is a small service built to mock http communication with third party",
-    "version": "v0.1"
+    "version": "v0.1",
+    "contact": {
+      "url": "https://github.com/gipeshka/http-illusion",
+      "email": "gipeshka@gmail.com"
+    }
   },
   "host": "localhost",
   "schemes": [
@@ -113,9 +117,13 @@
           "type": "object",
           "description": "String -> String map"
         },
-        "body": {
+        "bodyJson": {
           "type": "object",
           "description": "Json object"
+        },
+        "bodyUrlEncoded": {
+          "type": "object",
+          "description": "String -> String map"
         }
       }
     },
