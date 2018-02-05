@@ -28,6 +28,8 @@ Criteria has the following fields that can be used to describe http request:
 
 All the matches check that given value is a subset of the value in a request.
 
+Response is defined by `response` object in a request.
+
 Response has the following fields hat can be used to describe http response:
 
 - `status` int
