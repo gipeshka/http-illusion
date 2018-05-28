@@ -22,7 +22,7 @@ class CouchbaseReactionManagerDecorator @Inject()(
   logger: LoggingAdapter
 )(implicit
   clock: Clock,
-  executionContext: ExecutionContext
+  val executionContext: ExecutionContext
 ) extends MockReactionManager with AddReactionRequestFormat with DeleteReactionRequestFormat
 {
   def add(addReactionRequest: AddReactionRequest): Future[Done] = {
@@ -56,7 +56,13 @@ class CouchbaseReactionManagerDecorator @Inject()(
     }
   }
 
-  def state: Future[List[JsValue]] = reactionManager.state
+  def search(searchReactionRequest: SearchReactionRequest): Future[Map[ReactionRequestPart, Reaction]] = {
+    reactionManager.search(searchReactionRequest)
+  }
+
+  def state: Future[Map[ReactionRequestPart, Reaction]] = {
+    reactionManager.state
+  }
 
   private def getKey(request: ReactionRequestPart): String = request.hashCode.toHexString
 

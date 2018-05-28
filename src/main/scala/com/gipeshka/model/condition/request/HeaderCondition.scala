@@ -1,7 +1,9 @@
-package com.gipeshka.model.condition
-import akka.http.scaladsl.model.HttpRequest
+package com.gipeshka.model.condition.request
 
-class HeaderCondition(headers: Map[String, String]) extends RequestCondition
+import akka.http.scaladsl.model.HttpRequest
+import com.gipeshka.model.condition.GenericCondition
+
+class HeaderCondition(headers: Map[String, String]) extends GenericCondition[HttpRequest]
 {
   def apply(request: HttpRequest): Boolean = {
     val requestHeaders = request.headers.map { header =>

@@ -1,14 +1,20 @@
-package com.gipeshka.model.condition
+package com.gipeshka.model.condition.request
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext}
 
 import akka.http.scaladsl.model.HttpRequest
 import akka.stream.Materializer
+import com.gipeshka.model.condition.GenericCondition
 import gnieh.diffson.sprayJson._
 import spray.json._
 
-class BodyJsonCondition(json: JsValue)(implicit ec: ExecutionContext, m: Materializer) extends RequestCondition
+class BodyJsonCondition(
+  json: JsValue
+)(implicit
+  ec: ExecutionContext,
+  m: Materializer
+) extends GenericCondition[HttpRequest]
 {
   def apply(request: HttpRequest): Boolean = {
     try {

@@ -15,8 +15,11 @@ import com.gipeshka.request._
 import spray.json._
 
 @Singleton
-class InMemoryMockHandlerClient @Inject()(implicit
-  executionContext: ExecutionContext,
+class InMemoryMockHandlerClient @Inject()(
+  requestCondtionFactory: ConditionFactory[HttpRequest],
+  searchConditionFactory: ConditionFactory[ReactionRequestPart]
+)(implicit
+  val executionContext: ExecutionContext,
   materializer: Materializer
 ) extends HandlerClient with MockReactionManager with AddReactionRequestFormat
 {
@@ -41,7 +44,7 @@ class InMemoryMockHandlerClient @Inject()(implicit
 
   def add(addReactionRequest: AddReactionRequest): Future[Done] = this.synchronized {
     val reaction = Reaction(
-      buildCondition(addReactionRequest.request).apply,
+      buildCondition(addReactionRequest.request, requestCondtionFactory).apply,
       buildResponse(addReactionRequest.response),
       addReactionRequest.toJson
     )
@@ -59,17 +62,28 @@ class InMemoryMockHandlerClient @Inject()(implicit
     Future.successful(Done)
   }
 
-  def state: Future[List[JsValue]] = Future.successful(reactions.map(_._2.description).toList)
+  def search(searchReactionRequest: SearchReactionRequest): Future[Map[ReactionRequestPart, Reaction]] = {
+    val condition = buildCondition(searchReactionRequest.request, searchConditionFactory)
 
-  private def buildCondition(request: ReactionRequestPart): RequestCondition = {
-    val pathCondition = request.path.map(path => new PathCondition(path))
-    val methodCondition = request.method.map(method => new MethodCondition(method))
-    val queryCondition = request.query.map(query => new QueryCondition(query))
-    val headerCondition = request.headers.map(headers => new HeaderCondition(headers))
-    val bodyJsonCondition = request.bodyJson.map(json => new BodyJsonCondition(json))
-    val bodyUrlEncoded = request.bodyUrlEncoded.map(urlEncoded => new BodyUrlEncodedCondition(urlEncoded))
+    Future.successful(reactions.filterKeys(condition.apply).toMap)
+  }
 
-    new ChainCondition()
+  def state: Future[Map[ReactionRequestPart, Reaction]] = {
+    Future.successful(reactions.toMap)
+  }
+
+  private def buildCondition[T](
+    request: ReactionRequestPart,
+    conditionFactory: ConditionFactory[T]
+  ): GenericCondition[T] = {
+    val pathCondition = request.path.map(path => conditionFactory.path(path))
+    val methodCondition = request.method.map(method => conditionFactory.method(method))
+    val queryCondition = request.query.map(query => conditionFactory.query(query))
+    val headerCondition = request.headers.map(headers => conditionFactory.header(headers))
+    val bodyJsonCondition = request.bodyJson.map(body => conditionFactory.bodyJson(body))
+    val bodyUrlEncoded = request.bodyUrlEncoded.map(urlEncoded => conditionFactory.bodyUrl(urlEncoded))
+
+    new ChainCondition[T]()
       .and(pathCondition)
       .and(methodCondition)
       .and(queryCondition)

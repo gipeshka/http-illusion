@@ -1,18 +1,16 @@
 package com.gipeshka.model.condition
 
-import akka.http.scaladsl.model.HttpRequest
-
-class ChainCondition(conditions: List[RequestCondition] = List()) extends RequestCondition
+class ChainCondition[T](conditions: List[GenericCondition[T]] = List()) extends GenericCondition[T]
 {
-  def apply(request: HttpRequest): Boolean = {
+  def apply(request: T): Boolean = {
     conditions.forall(_(request))
   }
 
-  def and(condition: RequestCondition): ChainCondition = {
+  def and(condition: GenericCondition[T]): ChainCondition[T] = {
     new ChainCondition(condition :: this.conditions)
   }
 
-  def and(condition: Option[RequestCondition]): ChainCondition = {
+  def and(condition: Option[GenericCondition[T]]): ChainCondition[T] = {
     condition match {
       case Some(condition) => and(condition)
       case None => this

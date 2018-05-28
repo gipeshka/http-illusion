@@ -74,7 +74,7 @@
           "200": {
             "schema": {
               "type": "string",
-              "example": "AddedReaction removed"
+              "example": "Reaction removed"
             },
             "description": "Mock deleted"
           }
@@ -91,6 +91,84 @@
               }
             },
             "description": "Lists all currently set reactions"
+          }
+        }
+      }
+    },
+    "/setup/search": {
+      "post": {
+        "description": "Search mocks",
+        "parameters": [
+          {
+            "name": "req",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "request": {
+                  "$ref": "#/definitions/Request"
+                }
+              },
+              "required": ["request"],
+              "example": {
+                "request": {
+                  "path": "/oauth/token",
+                  "method": "POST",
+                  "query": {
+                    "username": "1d76dc2cdf4b49d9bfd864c5d14a39f4"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Reaction"
+              }
+            },
+            "description": "Lists matching reactions"
+          }
+        }
+      },
+      "delete": {
+        "description": "Search and delete matching mocks",
+        "parameters": [
+          {
+            "name": "req",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "request": {
+                  "$ref": "#/definitions/Request"
+                }
+              },
+              "required": ["request"],
+              "example": {
+                "request": {
+                  "path": "/oauth/token",
+                  "method": "POST",
+                  "query": {
+                    "username": "1d76dc2cdf4b49d9bfd864c5d14a39f4"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "string",
+              "example": "Reaction removed"
+            },
+            "description": "Mocks deleted"
           }
         }
       }

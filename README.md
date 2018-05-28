@@ -122,6 +122,56 @@ Example of response
 ]
 ```
 
+To search mocks
+
+```bash
+curl -X POST \
+  http://localhost:9090/setup/search \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"request": {
+		"headers": {
+			"Authorization": "Bearer thesupertoken"
+		}
+	}
+}'
+```
+
+Example of response
+
+```json
+[
+    {
+        "request": {
+            "headers": {
+                "Authorization": "Bearer thesupertoken"
+            }
+        },
+        "response": {
+            "status": 200,
+            "body": {
+                "mock": "I'm just mocking all the requests to external service for the user"
+            }
+        }
+    }
+]
+```
+
+To delete mocks with criteria
+
+```bash
+curl -X DELETE \
+  http://localhost:9090/setup/search \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"request": {
+		"headers": {
+			"Authorization": "Bearer thesupertoken"
+		}
+	}
+}'
+```
+
 ## Env vars ##
 
 The application is using the following  env vars to setup config:
