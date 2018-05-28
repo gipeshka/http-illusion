@@ -4,10 +4,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import akka.Done
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
-import akka.stream.Materializer
-import com.google.inject.ImplementedBy
 import com.gipeshka.handler.MockReactionManager.HttpRequestCondition
 import com.gipeshka.request.{AddReactionRequest, DeleteReactionRequest, ReactionRequestPart, SearchReactionRequest}
+import com.google.inject.ImplementedBy
 import spray.json.JsValue
 
 case class Reaction(condition: HttpRequestCondition, response: HttpResponse, description: JsValue)
@@ -29,15 +28,13 @@ trait MockReactionManager
     val toDelete = search(searchReactionRequest)
 
     toDelete.flatMap { reactionList =>
-      Future.sequence(
-        reactionList.map { case (reactionRequest, reaction) =>
-          delete(
-            DeleteReactionRequest(
-              request = reactionRequest
-            )
+      Future.traverse(reactionList) { case (reactionRequest, reaction) =>
+        delete(
+          DeleteReactionRequest(
+            request = reactionRequest
           )
-        }
-      ).map { _ =>
+        )
+      }.map { _ =>
         Done
       }
     }

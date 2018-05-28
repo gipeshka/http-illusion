@@ -26,20 +26,27 @@ class Module extends AbstractModule
     // general bindings
     bind(classOf[Config])
       .toInstance(Config.load)
+
     bind(classOf[ActorSystem])
       .toInstance(actorSystem)
+
     bind(classOf[ExecutionContext])
       .toInstance(actorSystem.dispatcher)
+
     bind(classOf[Materializer])
       .toInstance(ActorMaterializer())
+
     bind(classOf[LoggingAdapter])
       .toInstance(Logging(actorSystem, getClass))
+
     bind(classOf[MockReactionManager])
       .annotatedWith(Names.named("Default"))
       .to(classOf[InMemoryMockHandlerClient])
+
     bind(new TypeLiteral[ConditionFactory[HttpRequest]] {})
       .to(classOf[RequestConditionFactory])
       .in(classOf[Singleton])
+
     bind(new TypeLiteral[ConditionFactory[ReactionRequestPart]] {})
       .to(classOf[SearchConditionFactory])
       .in(classOf[Singleton])
@@ -47,9 +54,11 @@ class Module extends AbstractModule
     // connector specific bindings
     bind(classOf[CouchbaseConfig])
       .toInstance(CouchbaseConfig.load)
+
     bind(classOf[MockReactionManager])
       .annotatedWith(Names.named("Actual"))
       .to(classOf[CouchbaseReactionManagerDecorator])
+
     bind(classOf[Clock])
       .toInstance(Clock.systemDefaultZone)
   }

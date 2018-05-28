@@ -6,10 +6,10 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
 import akka.Done
-import akka.event.LoggingAdapter
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
 import akka.stream.Materializer
 import com.gipeshka.exception.MockerNoReactionFoundException
+import com.gipeshka.model.condition.ConditionHelper._
 import com.gipeshka.model.condition._
 import com.gipeshka.request._
 import spray.json._
@@ -83,8 +83,7 @@ class InMemoryMockHandlerClient @Inject()(
     val bodyJsonCondition = request.bodyJson.map(body => conditionFactory.bodyJson(body))
     val bodyUrlEncoded = request.bodyUrlEncoded.map(urlEncoded => conditionFactory.bodyUrl(urlEncoded))
 
-    new ChainCondition[T]()
-      .and(pathCondition)
+    pathCondition
       .and(methodCondition)
       .and(queryCondition)
       .and(headerCondition)
