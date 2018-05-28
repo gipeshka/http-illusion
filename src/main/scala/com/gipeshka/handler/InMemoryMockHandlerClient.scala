@@ -16,7 +16,7 @@ import spray.json._
 
 @Singleton
 class InMemoryMockHandlerClient @Inject()(
-  requestCondtionFactory: ConditionFactory[HttpRequest],
+  requestConditionFactory: ConditionFactory[HttpRequest],
   searchConditionFactory: ConditionFactory[ReactionRequestPart]
 )(implicit
   val executionContext: ExecutionContext,
@@ -44,7 +44,7 @@ class InMemoryMockHandlerClient @Inject()(
 
   def add(addReactionRequest: AddReactionRequest): Future[Done] = this.synchronized {
     val reaction = Reaction(
-      buildCondition(addReactionRequest.request, requestCondtionFactory).apply,
+      buildCondition(addReactionRequest.request, requestConditionFactory).apply,
       buildResponse(addReactionRequest.response),
       addReactionRequest.toJson
     )
