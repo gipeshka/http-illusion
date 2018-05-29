@@ -14,6 +14,9 @@ libraryDependencies ++= {
     "org.gnieh" %% "diffson-spray-json" % "2.2.4",
 
     // connector specific dependencies
-    "com.couchbase.client" % "java-client" % "2.5.3"
+    "com.couchbase.client" % "java-client" % "2.5.3",
+
+    // test dependencies
+    "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
   )
 }
