@@ -199,6 +199,8 @@ font-style: italic;
   <li><a href="#setupDelete"><code><span class="http-method">delete</span> /setup</code></a></li>
   <li><a href="#setupGet"><code><span class="http-method">get</span> /setup</code></a></li>
   <li><a href="#setupPost"><code><span class="http-method">post</span> /setup</code></a></li>
+  <li><a href="#setupSearchDelete"><code><span class="http-method">delete</span> /setup/search</code></a></li>
+  <li><a href="#setupSearchPost"><code><span class="http-method">post</span> /setup/search</code></a></li>
   </ul>
 
   <h1><a name="Default">Default</a></h1>
@@ -237,7 +239,7 @@ font-style: italic;
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>"AddedReaction removed"</code></pre>
+    <pre class="example"><code>"Reaction removed"</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -362,6 +364,123 @@ font-style: italic;
         <a href="#String">String</a>
   </div> <!-- method -->
   <hr/>
+  <div class="method"><a name="setupSearchDelete"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /setup/search</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">setupSearchDelete</span>)</div>
+    <div class="method-notes">Search and delete matching mocks</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">req <a href="#req_2">req_2</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      String
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>"Reaction removed"</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Mocks deleted
+        <a href="#String">String</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="setupSearchPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /setup/search</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">setupSearchPost</span>)</div>
+    <div class="method-notes">Search mocks</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">req <a href="#req_1">req_1</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Reaction">Reaction</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "request" : {
+    "path" : "/oauth/token",
+    "method" : "POST",
+    "query" : {
+      "username" : "1d76dc2cdf4b49d9bfd864c5d14a39f4"
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : {
+      "scope" : "noone cares",
+      "access_token" : "thesupertoken",
+      "expires_in" : 100,
+      "token_type" : "Bearer"
+    }
+  }
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Lists matching reactions
+        
+  </div> <!-- method -->
+  <hr/>
 
   <h2><a name="__Models">Models</a></h2>
   [ Jump to <a href="#__Methods">Methods</a> ]
@@ -372,6 +491,8 @@ font-style: italic;
     <li><a href="#Request"><code>Request</code> - </a></li>
     <li><a href="#Response"><code>Response</code> - </a></li>
     <li><a href="#req"><code>req</code> - </a></li>
+    <li><a href="#req_1"><code>req_1</code> - </a></li>
+    <li><a href="#req_2"><code>req_2</code> - </a></li>
   </ol>
 
   <div class="model">
@@ -404,6 +525,20 @@ font-style: italic;
   </div>
   <div class="model">
     <h3><a name="req"><code>req</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">request </div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="req_1"><code>req_1</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">request </div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="req_2"><code>req_2</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     
     <div class="field-items">
       <div class="param">request </div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>

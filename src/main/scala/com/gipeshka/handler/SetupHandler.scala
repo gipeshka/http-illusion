@@ -6,12 +6,12 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpRequest, HttpResponse}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.stream.Materializer
-import com.gipeshka.request.{AddReactionRequest, AddReactionRequestFormat, DeleteReactionRequest, DeleteReactionRequestFormat}
-
+import com.gipeshka.request._
+import spray.json._
 
 class SetupHandler @Inject()(
   @Named("Actual") mockReactionManager: MockReactionManager
@@ -19,28 +19,51 @@ class SetupHandler @Inject()(
   executionContext: ExecutionContext,
   system: ActorSystem,
   materializer: Materializer
-) extends HandlerClient with AddReactionRequestFormat with DeleteReactionRequestFormat
+) extends HandlerClient
+  with AddReactionRequestFormat
+  with DeleteReactionRequestFormat
+  with SearchReactionRequestFormat
 {
   private val handler: HttpRequest => Future[HttpResponse] = {
     val route = {
-      path("setup") {
-        post {
-          entity(as[AddReactionRequest]) { request =>
+      pathPrefix("setup") {
+        pathEnd {
+          post {
+            entity(as[AddReactionRequest]) { request =>
+              complete {
+                mockReactionManager.add(request).map { _ =>
+                  HttpResponse(entity = "Added new reaction")
+                }
+              }
+            }
+          } ~ get {
             complete {
-              mockReactionManager.add(request).map { _ =>
-                HttpResponse(entity = "Added new reaction")
+              mockReactionManager.state.map(httpResponseFromState)
+            }
+          } ~ delete {
+            entity(as[DeleteReactionRequest]) { request =>
+              complete {
+                mockReactionManager.delete(request).map { _ =>
+                  HttpResponse(entity = "Reaction removed")
+                }
               }
             }
           }
-        } ~ get {
-          complete {
-            mockReactionManager.state
-          }
-        } ~ delete {
-          entity(as[DeleteReactionRequest]) { request =>
-            complete {
-              mockReactionManager.delete(request).map { _ =>
-                HttpResponse(entity = "Reaction removed")
+        } ~
+        path("search") {
+          post {
+            entity(as[SearchReactionRequest]) { request =>
+              complete {
+                mockReactionManager.search(request).map(httpResponseFromState)
+              }
+            }
+          } ~
+          delete {
+            entity(as[SearchReactionRequest]) { request =>
+              complete {
+                mockReactionManager.searchAndDelete(request).map { _ =>
+                  HttpResponse(entity = "Reaction removed")
+                }
               }
             }
           }
@@ -63,5 +86,14 @@ class SetupHandler @Inject()(
 
   def handle(httpRequest: HttpRequest): Future[HttpResponse] = {
     handler(httpRequest)
+  }
+
+  private def httpResponseFromState(state: Map[ReactionRequestPart, Reaction]): HttpResponse = {
+    HttpResponse(
+      entity = HttpEntity(
+        ContentTypes.`application/json`,
+        state.values.map(_.description).toList.toJson.toString
+      )
+    )
   }
 }

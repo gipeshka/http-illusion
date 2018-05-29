@@ -1,21 +1,20 @@
-package com.gipeshka.model.condition
+package com.gipeshka.model.condition.request
 
-import scala.concurrent.{Await, ExecutionContext}
-
-import akka.http.scaladsl.unmarshalling.Unmarshal
-import akka.http.scaladsl.model.{FormData, HttpRequest}
-import akka.http.scaladsl.unmarshalling.PredefinedFromEntityUnmarshallers
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext}
 import scala.util.control.NonFatal
 
+import akka.http.scaladsl.model.{FormData, HttpRequest}
+import akka.http.scaladsl.unmarshalling.{PredefinedFromEntityUnmarshallers, Unmarshal}
 import akka.stream.Materializer
+import com.gipeshka.model.condition.GenericCondition
 
 class BodyUrlEncodedCondition(
   expected: Map[String, String]
 )(implicit
   ec: ExecutionContext,
   m: Materializer
-) extends RequestCondition
+) extends GenericCondition[HttpRequest]
 {
   implicit val unmarshaller = PredefinedFromEntityUnmarshallers.defaultUrlEncodedFormDataUnmarshaller
 
