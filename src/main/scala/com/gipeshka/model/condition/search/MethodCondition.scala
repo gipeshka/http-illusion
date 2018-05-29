@@ -6,6 +6,6 @@ import com.gipeshka.request.ReactionRequestPart
 class MethodCondition(method: String) extends GenericCondition[ReactionRequestPart]
 {
   def apply(request: ReactionRequestPart): Boolean = {
-    request.method.contains(method)
+    request.method.map(_.toLowerCase).contains(method.toLowerCase)
   }
 }
