@@ -11,8 +11,6 @@ import com.gipeshka.model.condition.{GenericCondition, MapMatchingConditionSpec}
 class BodyUrlEncodedConditionSpec
   extends MapMatchingConditionSpec[HttpRequest]
 {
-  private val charset = HttpCharsets.`UTF-8`
-
   protected def spawnCondition(data: Map[String, String]): GenericCondition[HttpRequest] = {
     val ec = ExecutionContext.global
     implicit val system = ActorSystem("BodyUrlEncodedConditionSpec")
@@ -24,7 +22,7 @@ class BodyUrlEncodedConditionSpec
   protected def spawnRequest(withData: Option[Map[String, String]]): HttpRequest = {
     HttpRequest(
       entity = HttpEntity.Strict(
-        MediaTypes.`application/x-www-form-urlencoded`.toContentType(charset),
+        MediaTypes.`application/x-www-form-urlencoded`.toContentType(HttpCharsets.`UTF-8`),
         ByteString(Uri.Query.apply(withData.getOrElse(Map())).toString)
       )
     )
