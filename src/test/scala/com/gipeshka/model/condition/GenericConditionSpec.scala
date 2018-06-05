@@ -8,8 +8,14 @@ class GenericConditionSpec
   extends FlatSpec
     with Matchers
 {
+  private type AnyCondition = GenericCondition[Any]
+
+  private type Combinator = (AnyCondition, AnyCondition) => AnyCondition
+
+  private type OptionalCombinator = (Option[AnyCondition], Option[AnyCondition]) => AnyCondition
+
   "GenericConditionSpec" should "combine conditions" in {
-    val conditionTable = Table[Boolean, Boolean, (GenericCondition[Any], GenericCondition[Any]) => GenericCondition[Any], Boolean](
+    val conditionTable = Table[Boolean, Boolean, Combinator, Boolean](
       ("firstPredicate", "secondPredicate", "combinator", "expectedResult"),
       (            true,              true,      _ and _,             true),
       (            true,             false,      _ and _,            false),
@@ -30,7 +36,7 @@ class GenericConditionSpec
   }
 
   it should "combine optional conditions" in {
-    val conditionTable = Table[Option[Boolean], Option[Boolean], (Option[GenericCondition[Any]], Option[GenericCondition[Any]]) => GenericCondition[Any], Boolean](
+    val conditionTable = Table[Option[Boolean], Option[Boolean], OptionalCombinator, Boolean](
       ("firstPredicate", "secondPredicate", "combinator", "expectedResult"),
       (            None,              None,      _ and _,             true),
       (            None,        Some(true),      _ and _,             true),
@@ -39,7 +45,6 @@ class GenericConditionSpec
       (     Some(false),              None,      _ and _,            false),
       (      Some(true),        Some(true),      _ and _,             true),
       (      Some(true),       Some(false),      _ and _,            false),
-
       (            None,              None,       _ or _,            false),
       (            None,        Some(true),       _ or _,             true),
       (     Some(false),              None,       _ or _,            false),
